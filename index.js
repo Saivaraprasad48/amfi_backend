@@ -77,6 +77,12 @@ const axios = require("axios");
 const cors = require("cors");
 const cron = require("node-cron");
 const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 
 const app = express();
 app.use(cors());
@@ -95,7 +101,7 @@ const schemesToSearch = [
 
 const lastRefreshedMap = {}; 
 
-const formatTime = () => dayjs().format("DD-MMM-YYYY hh:mm A");
+const formatTime = () => dayjs().tz("Asia/Kolkata").format("DD-MMM-YYYY hh:mm A");
 
 const customRoundNAV = (navStr) => {
   const nav = parseFloat(navStr);
