@@ -122,10 +122,10 @@ const customRoundNAV = (navStr) => {
   return result.toFixed(2);
 };
 
+const previousNAVMap = {};
 
 const updateLastRefreshed = async () => {
-  const now = formatTime();
-  console.log(`🕒 [Cron] Running NAV check at `);
+  console.log(`🕒 [Cron] Running NAV check at ${formatTime()}`);
 
   try {
     const { data } = await axios.get(
@@ -133,7 +133,7 @@ const updateLastRefreshed = async () => {
     );
     const lines = data.split("\n");
     const todayFormatted = dayjs().format("DD-MMM-YYYY");
-    const now = formatTime();
+
     for (const schemeName of schemesToSearch) {
       const matchedLine = lines.find((line) =>
         line.toLowerCase().includes(schemeName.toLowerCase())
@@ -141,19 +141,27 @@ const updateLastRefreshed = async () => {
 
       if (matchedLine) {
         const parts = matchedLine.split(";");
+        const nav = customRoundNAV(parts[4]?.trim());
         const date = parts[5]?.trim();
 
         if (date === todayFormatted) {
-          lastRefreshedMap[schemeName] = now;
+          const prevNAV = previousNAVMap[schemeName];
+
+          if (prevNAV !== nav) {
+            previousNAVMap[schemeName] = nav; 
+            lastRefreshedMap[schemeName] = formatTime();
+            console.log(`🔄 NAV changed for ${schemeName} → ${nav}`);
+          }
         }
       }
     }
 
-    console.log(`✅ Checked NAV update at ${now}`);
+    console.log(`✅ Finished NAV change check at ${formatTime()}`);
   } catch (err) {
     console.error("❌ Error in lastRefreshed cron:", err.message);
   }
 };
+
 
 cron.schedule("* 21-23 * * *", updateLastRefreshed, {
   timezone: "Asia/Kolkata",
