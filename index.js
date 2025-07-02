@@ -169,13 +169,10 @@ const updateLastRefreshed = async () => {
 };
 
 
-cron.schedule("* 9-10 * * *", updateLastRefreshed, {
+cron.schedule("*/5 22 * * *", updateLastRefreshed, {
   timezone: "Asia/Kolkata",
 });
 
-cron.schedule("* 22-22 * * *", updateLastRefreshed, {
-  timezone: "Asia/Kolkata",
-});
 
 
 
