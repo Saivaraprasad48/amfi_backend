@@ -174,8 +174,6 @@ cron.schedule("*/5 22 * * *", updateLastRefreshed, {
 });
 
 
-
-
 app.get("/api/nav", async (req, res) => {
   try {
     const { data } = await axios.get(
