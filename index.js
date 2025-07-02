@@ -92,11 +92,8 @@ const schemesToSearch = [
   "ICICI Prudential Nifty Next 50 Index Fund - Direct Plan -  Growth",
   "quant Small Cap Fund - Growth Option - Direct Plan",
   "Motilal Oswal Midcap Fund-Direct Plan-Growth Option",
-  "Nippon India Large Cap Fund - Direct Plan Growth Plan - Growth Option",
-  "SBI PSU Fund - DIRECT PLAN - GROWTH",
   "Franklin U.S. Opportunities Equity Active Fund of Funds - Direct - Growth",
-  "HDFC Balanced Advantage Fund - Growth Plan - Direct Plan",
-  "ICICI Prudential All Seasons Bond Fund - Direct Plan - Growth",
+  "HDFC Balanced Advantage Fund - Growth Plan - Direct Plan"
 ];
 
 const lastRefreshedMap = {}; 
