@@ -3,11 +3,7 @@ const mongoose = require("mongoose");
 async function connectToDatabase() {
   try {
     await mongoose.connect(
-      "mongodb+srv://sai_vara_db:Dsvp%404904@cluster0.vf8la7o.mongodb.net/amfi",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
+      "mongodb+srv://sai_vara_db:Dsvp%404904@cluster0.vf8la7o.mongodb.net/amfi"
     );
     console.log("Connected to DB");
   } catch (error) {
