@@ -92,7 +92,7 @@ const schemesToSearch = [
   "ICICI Prudential Nifty Next 50 Index Fund - Direct Plan -  Growth",
   "quant Small Cap Fund - Growth Option - Direct Plan",
   "Motilal Oswal Midcap Fund-Direct Plan-Growth Option",
-  "Franklin U.S. Opportunities Equity Active Fund of Funds - Direct - Growth",
+  "Edelweiss US Technology Equity Fund of Fund- Direct Plan",
   "HDFC Balanced Advantage Fund - Growth Plan - Direct Plan"
 ];
 
