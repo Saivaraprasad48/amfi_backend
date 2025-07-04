@@ -45,19 +45,15 @@ const customRoundNAV = (navStr) => {
 
 const updateLastRefreshed = async () => {
   const now = formatTime();
-  const todayFormatted = dayjs().format("DD-MMM-YYYY");
   console.log(`🕒 [Cron] Running NAV check at ${now}`);
+
   try {
-    const alreadyExists = await NAVModel.findOne({ date: todayFormatted });
-
-    if (alreadyExists) {
-      console.log(`⏭️ Skipping... Data already inserted for ${todayFormatted}`);
-      return;
-    }
-
-    const { data } = await axios.get("https://www.amfiindia.com/spages/NAVAll.txt");
+    const { data } = await axios.get(
+      "https://www.amfiindia.com/spages/NAVAll.txt"
+    );
     const lines = data.split("\n");
-
+    const todayFormatted = dayjs().format("DD-MMM-YYYY");
+    const now = formatTime();
     for (const schemeName of schemesToSearch) {
       const matchedLine = lines.find((line) =>
         line.toLowerCase().includes(schemeName.toLowerCase())
@@ -77,7 +73,7 @@ const updateLastRefreshed = async () => {
             date,
             lastRefreshed: now,
           });
-        console.log(`✅ Created db record at ${now}`);
+         console.log(`✅ Created new record in db at ${now}`);
         }
       }
     }
