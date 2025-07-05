@@ -3,10 +3,15 @@ const axios = require("axios");
 const cors = require("cors");
 const cron = require("node-cron");
 const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
 const { NAVModel } = require("./db");
 
 const app = express();
 app.use(cors());
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const schemesToSearch = [
   "JM Flexicap Fund (Direct) - Growth Option",
@@ -18,7 +23,8 @@ const schemesToSearch = [
 ];
 
 const lastRefreshedMap = {}; 
-const formatTime = () => dayjs().format("DD-MMM-YYYY hh:mm A");
+const formatTime = () => dayjs().tz("Asia/Kolkata").format("DD-MMM-YYYY hh:mm A");
+
 const customRoundNAV = (navStr) => {
   const nav = parseFloat(navStr);
   if (isNaN(nav)) return navStr;
@@ -53,7 +59,6 @@ const updateLastRefreshed = async () => {
     );
     const lines = data.split("\n");
     const todayFormatted = dayjs().format("DD-MMM-YYYY");
-    const now = formatTime();
     for (const schemeName of schemesToSearch) {
       const matchedLine = lines.find((line) =>
         line.toLowerCase().includes(schemeName.toLowerCase())
@@ -65,16 +70,21 @@ const updateLastRefreshed = async () => {
         const nav = customRoundNAV(parts[4]?.trim());
         const date = parts[5]?.trim();
 
-        if (date === todayFormatted) {
-          lastRefreshedMap[schemeName] = now;
-          await NAVModel.create({
-            scheme,
-            nav,
-            date,
-            lastRefreshed: now,
-          });
-         console.log(`✅ Created new record in db at ${now}`);
-        }
+    if (date === todayFormatted) {
+  const existing = await NAVModel.findOne({ scheme, date });
+  if (!existing) {
+    lastRefreshedMap[schemeName] = now;
+    await NAVModel.create({
+      scheme,
+      nav,
+      date,
+      lastRefreshed: now,
+    });
+    console.log(`✅ New NAV record inserted at ${now}`);
+  } else {
+    console.log(`ℹ️ NAV already exists for ${scheme} on ${date}, skipping.`);
+  }
+    }
       }
     }
   } catch (err) {
@@ -82,7 +92,7 @@ const updateLastRefreshed = async () => {
   }
 };
 
-cron.schedule("* 22 * * *", updateLastRefreshed, {
+cron.schedule("*/2 9,22 * * *", updateLastRefreshed, {
   timezone: "Asia/Kolkata",
 });
 
