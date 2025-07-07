@@ -93,7 +93,7 @@ const updateLastRefreshed = async () => {
   }
 };
 
-cron.schedule("*/2 9,22 * * *", updateLastRefreshed, {
+cron.schedule("* 9,22 * * *", updateLastRefreshed, {
   timezone: "Asia/Kolkata",
 });
 
