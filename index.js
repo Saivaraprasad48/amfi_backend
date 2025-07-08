@@ -71,8 +71,8 @@ const updateLastRefreshed = async () => {
         const nav = customRoundNAV(parts[4]?.trim());
         const date = parts[5]?.trim();
 
-    if (date === todayFormatted) {
-  const existing = await NAVModel.findOne({ scheme, date });
+ if (date === todayFormatted) {
+  const existing = await NAVModel.findOne({ scheme });
   if (!existing) {
     lastRefreshedMap[schemeName] = now;
     await NAVModel.create({
@@ -81,9 +81,24 @@ const updateLastRefreshed = async () => {
       date,
       lastRefreshed: now,
     });
-    console.log(`✅ New NAV record inserted at ${now}`);
+    console.log(`✅ New NAV record inserted for ${scheme} at ${now}`);
   } else {
-    console.log(`ℹ️ NAV already exists for ${scheme} on ${date}, skipping.`);
+    if (existing.date !== todayFormatted) {
+      await NAVModel.updateOne(
+        { scheme },
+        {
+          $set: {
+            nav,
+            date,
+            lastRefreshed: now,
+          },
+        }
+      );
+      lastRefreshedMap[schemeName] = now;
+      console.log(`🔄 Updated NAV record for ${scheme} with new date at ${now}`);
+    } else {
+      console.log(`ℹ️ NAV already up to date for ${scheme} on ${date}, skipping.`);
+    }
   }
     }
       }
