@@ -20,7 +20,7 @@ const schemesToSearch = [
   "quant Small Cap Fund - Growth Option - Direct Plan",
   "Motilal Oswal Midcap Fund-Direct Plan-Growth Option",
   "Edelweiss US Technology Equity Fund of Fund- Direct Plan",
-  "HDFC Balanced Advantage Fund - Growth Plan - Direct Plan",
+  "Baroda BNP Paribas Balanced Advantage Fund-Direct Plan-Growth Option",
 ];
 
 const lastRefreshedMap = {}; 
