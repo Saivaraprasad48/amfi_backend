@@ -74,8 +74,10 @@ const updateLastRefreshed = async () => {
 
  if (date === todayFormatted) {
   const existing = await NAVModel.findOne({ scheme });
+   console.log("existing", existing)
   if (!existing) {
     lastRefreshedMap[schemeName] = now;
+    console.log("creating new nav", schemeName)
     await NAVModel.create({
       scheme,
       nav,
@@ -85,6 +87,7 @@ const updateLastRefreshed = async () => {
     console.log(`✅ New NAV record inserted for ${scheme} at ${now}`);
   } else {
     if (existing.date !== todayFormatted) {
+      console.log("updating nav", schemeName)
       await NAVModel.updateOne(
         { scheme },
         {
@@ -98,6 +101,7 @@ const updateLastRefreshed = async () => {
       lastRefreshedMap[schemeName] = now;
       console.log(`🔄 Updated NAV record for ${scheme} with new date at ${now}`);
     } else {
+        console.log("uptodate nav", schemeName)
       console.log(`ℹ️ NAV already up to date for ${scheme} on ${date}, skipping.`);
     }
   }
