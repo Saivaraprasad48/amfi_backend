@@ -66,6 +66,7 @@ const updateLastRefreshed = async () => {
       );
 
       if (matchedLine) {
+        console.log("matched", matchedLine)
         const parts = matchedLine.split(";");
         const scheme = parts[3]?.trim();
         const nav = customRoundNAV(parts[4]?.trim());
