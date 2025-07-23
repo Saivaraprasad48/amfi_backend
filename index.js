@@ -113,9 +113,9 @@ const updateLastRefreshed = async () => {
   }
 };
 
-// cron.schedule("*/3 * * * *", updateLastRefreshed, {
-//   timezone: "Asia/Kolkata",
-// });
+cron.schedule("*/3 * * * *", updateLastRefreshed, {
+  timezone: "Asia/Kolkata",
+});
 
 app.get("/api/nav", async (req, res) => {
   try {
