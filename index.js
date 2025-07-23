@@ -66,7 +66,6 @@ const updateLastRefreshed = async () => {
       );
 
       if (matchedLine) {
-        console.log("matched", matchedLine)
         const parts = matchedLine.split(";");
         const scheme = parts[3]?.trim();
         const nav = customRoundNAV(parts[4]?.trim());
@@ -74,10 +73,8 @@ const updateLastRefreshed = async () => {
         console.log(date, todayFormatted, date === todayFormatted)
  if (date === todayFormatted) {
   const existing = await NAVModel.findOne({ scheme });
-   console.log("existing", existing)
   if (!existing) {
     lastRefreshedMap[schemeName] = now;
-    console.log("creating new nav", schemeName)
     await NAVModel.create({
       scheme,
       nav,
@@ -87,7 +84,6 @@ const updateLastRefreshed = async () => {
     console.log(`✅ New NAV record inserted for ${scheme} at ${now}`);
   } else {
     if (existing.date !== todayFormatted) {
-      console.log("updating nav", schemeName)
       await NAVModel.updateOne(
         { scheme },
         {
@@ -113,7 +109,7 @@ const updateLastRefreshed = async () => {
   }
 };
 
-cron.schedule("*/2 * * * *", updateLastRefreshed, {
+cron.schedule("*/2 9,22-23 * * *", updateLastRefreshed, {
   timezone: "Asia/Kolkata",
 });
 
