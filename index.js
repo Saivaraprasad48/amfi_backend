@@ -96,7 +96,6 @@ const updateLastRefreshed = async () => {
       lastRefreshedMap[schemeName] = now;
       console.log(`🔄 Updated NAV record for ${scheme} with new date at ${now}`);
     } else {
-        console.log("uptodate nav", schemeName)
       console.log(`ℹ️ NAV already up to date for ${scheme} on ${date}, skipping.`);
     }
   }
@@ -113,6 +112,10 @@ cron.schedule("*/2 9 * * *", updateLastRefreshed, {
 });
 
 cron.schedule("*/2 22 * * *", updateLastRefreshed, {
+  timezone: "Asia/Kolkata",
+});
+
+cron.schedule("0-30/2 23 * * *", updateLastRefreshed, {
   timezone: "Asia/Kolkata",
 });
 
