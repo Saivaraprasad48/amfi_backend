@@ -70,7 +70,6 @@ const updateLastRefreshed = async () => {
         const scheme = parts[3]?.trim();
         const nav = customRoundNAV(parts[4]?.trim());
         const date = parts[5]?.trim();
-        console.log(date, todayFormatted, date === todayFormatted)
  if (date === todayFormatted) {
   const existing = await NAVModel.findOne({ scheme });
   if (!existing) {
