@@ -115,10 +115,6 @@ cron.schedule("*/2 22 * * *", updateLastRefreshed, {
   timezone: "Asia/Kolkata",
 });
 
-cron.schedule("0-30/2 23 * * *", updateLastRefreshed, {
-  timezone: "Asia/Kolkata",
-});
-
 app.get("/api/nav", async (req, res) => {
   try {
     const { data } = await axios.get(
