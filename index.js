@@ -127,7 +127,7 @@ const updateLastRefreshedTwo = async () => {
         const scheme = parts[3]?.trim();
         const nav = customRoundNAV(parts[4]?.trim());
         const date = parts[5]?.trim();
- if (date === yesterdayFormatted  && scheme == "Edelweiss US Technology Equity Fund of Fund- Direct Plan- Growth") {
+ if (date === yesterdayFormatted  && scheme === "Edelweiss US Technology Equity Fund of Fund- Direct Plan- Growth") {
   const existing = await NAVModel.findOne({ scheme });
   if (!existing) {
     lastRefreshedMap[schemeName] = now;
@@ -139,7 +139,7 @@ const updateLastRefreshedTwo = async () => {
     });
     console.log(`✅ New NAV record inserted for ${scheme} at ${now}`);
   } else {
-    if (existing.date !== yesterdayFormatted && scheme == "Edelweiss US Technology Equity Fund of Fund- Direct Plan- Growth") {
+    if (dayjs(existing.date).format("DD-MMM-YYYY") !== yesterdayFormatted && scheme === "Edelweiss US Technology Equity Fund of Fund- Direct Plan- Growth") {
       await NAVModel.updateOne(
         { scheme },
         {
