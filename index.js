@@ -107,7 +107,64 @@ const updateLastRefreshed = async () => {
   }
 };
 
-cron.schedule("*/2 9 * * *", updateLastRefreshed, {
+const updateLastRefreshedTwo = async () => {
+  const now = formatTime();
+  console.log(`🕒 [Cron] Running NAV check at ${now}`);
+
+  try {
+    const { data } = await axios.get(
+      "https://www.amfiindia.com/spages/NAVAll.txt"
+    );
+    const lines = data.split("\n");
+ const yesterdayFormatted = dayjs().subtract(1, 'day').format("DD-MMM-YYYY");
+    for (const schemeName of schemesToSearch) {
+      const matchedLine = lines.find((line) =>
+        line.toLowerCase().includes(schemeName.toLowerCase())
+      );
+
+      if (matchedLine) {
+        const parts = matchedLine.split(";");
+        const scheme = parts[3]?.trim();
+        const nav = customRoundNAV(parts[4]?.trim());
+        const date = parts[5]?.trim();
+ if (date === yesterdayFormatted  && scheme == "Edelweiss US Technology Equity Fund of Fund- Direct Plan- Growth") {
+  const existing = await NAVModel.findOne({ scheme });
+  if (!existing) {
+    lastRefreshedMap[schemeName] = now;
+    await NAVModel.create({
+      scheme,
+      nav,
+      date,
+      lastRefreshed: now,
+    });
+    console.log(`✅ New NAV record inserted for ${scheme} at ${now}`);
+  } else {
+    if (existing.date !== yesterdayFormatted && scheme == "Edelweiss US Technology Equity Fund of Fund- Direct Plan- Growth") {
+      await NAVModel.updateOne(
+        { scheme },
+        {
+          $set: {
+            nav,
+            date,
+            lastRefreshed: now,
+          },
+        }
+      );
+      lastRefreshedMap[schemeName] = now;
+      console.log(`🔄 Updated NAV record for ${scheme} with new date at ${now}`);
+    } else {
+      console.log(`ℹ️ NAV already up to date for ${scheme} on ${date}, skipping.`);
+    }
+  }
+    }
+      }
+    }
+  } catch (err) {
+    console.error("❌ Error in lastRefreshed cron:", err.message);
+  }
+};
+
+cron.schedule("30-59/2 9 * * *", updateLastRefreshedTwo, {
   timezone: "Asia/Kolkata",
 });
 
