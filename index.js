@@ -109,7 +109,7 @@ const updateLastRefreshed = async () => {
 
 const updateLastRefreshedTwo = async () => {
   const now = formatTime();
-  console.log(`🕒 [Cron] Running NAV check at ${now}`);
+  console.log(`🕒 [Cron-2] Running NAV check at ${now}`);
 
   try {
     const { data } = await axios.get(
@@ -164,13 +164,14 @@ const updateLastRefreshedTwo = async () => {
   }
 };
 
-cron.schedule("30-59/2 9 * * *", updateLastRefreshedTwo, {
+cron.schedule("30-59/2 9 * * 1-5", updateLastRefreshedTwo, {
   timezone: "Asia/Kolkata",
 });
 
-cron.schedule("*/2 22 * * *", updateLastRefreshed, {
+cron.schedule("*/2 22 * * 1-5", updateLastRefreshed, {
   timezone: "Asia/Kolkata",
 });
+
 
 app.get("/api/nav", async (req, res) => {
   try {
